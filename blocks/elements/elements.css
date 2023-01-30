@@ -6,13 +6,13 @@
     grid-template-columns: repeat(auto-fit, minmax(282px, 1fr));
     justify-items: center;
     row-gap: 20px;
+    column-gap: 17px;
     box-sizing: border-box;
 }
 
-@media screen and (min-width: 880px) {
+@media screen and (min-width: 899px) {
     .elements {
         margin: 51px auto 67px;
-        column-gap: 17px;
         padding: 0;
     }
 }
