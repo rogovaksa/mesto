@@ -1,4 +1,5 @@
 .element__description {
+    font-family: 'Inter', ‘Arial’, sans-serif;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;

@@ -6,9 +6,14 @@
 
 @media screen and (min-width: 880px) {
     .header__logo {
-      padding-left: 0px;
       max-width: 142px;
       padding-bottom: 40px;
     }
+}
+
+@media screen and (min-width: 920px) {
+  .header__logo {
+    padding-left: 0px;
+  }
 }
 
