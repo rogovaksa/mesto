@@ -5,7 +5,7 @@
     min-height: 50px;
     border-radius: 2px;
     padding: 0;
-    font-family: 'Inter';
+    font-family: 'Inter', ‘Arial’, sans-serif;
     font-style: normal;
     font-weight: 400;
     font-size: 14px;
@@ -19,4 +19,11 @@
     cursor: pointer;
     opacity: .8;
     transition: opacity 0.6s ease-in;
+}
+
+@media screen and (min-width: 880px) {
+  .popup__save {
+    font-size: 18px;
+    line-height: 22px;
+}
 }
