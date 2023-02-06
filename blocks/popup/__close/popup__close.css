@@ -2,7 +2,8 @@
     position: absolute;
     width: 20px;
     height: 20px;
-    transform: translate(235px, -61px);
+    top: -38px;
+    right: -38px;
     background-color:rgba(0, 0, 0, 0);
     background-image: url(../../../images/popup__close.svg);
     background-position: center;
@@ -23,6 +24,6 @@
     .popup__close {
         width: 32px;
         height: 32px;
-        transform: translate(403px, -74px);
+
     }
 }
