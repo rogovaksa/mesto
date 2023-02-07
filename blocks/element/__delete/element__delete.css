@@ -4,13 +4,14 @@
   right: 20px;
   width: 18px;
   height: 19px;
-  background-image: url(../../../images/element__delete.svg);
   background: transparent;
+  background-image: url(../../../images/element__delete.svg);
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
   border: none;
   padding: 0;
+  opacity: 1;
 }
 
 .element__delete:hover {
