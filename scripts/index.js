@@ -72,6 +72,7 @@ const cardLike = (event) => {
   event.target.classList.toggle('element__like-button_active');
 };
 
+// Обработка введенных данных
 function handleCardElement(name, link) {
   popupOpenedPictureElement.src = link
   popupOpenedPictureElement.alt = name
@@ -119,8 +120,8 @@ const submitPopupAddForm = (event) => {
     name: popupAddCardNameInput.value,
     link: popupAddCardLinkInput.value,
   });
-  event.target.reset();
   closePopup(popupAddElement);
+  event.target.reset();
 };
 
 // Доп. ф-ция с вебинара, чтобы попап закрывался при клике вне формы
