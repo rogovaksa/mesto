@@ -33,6 +33,7 @@ function openPopup(elem) {
 // Открыть popupAdd
 function openPopupAdd() {
   openPopup(popupAddElement);
+  document.addEventListener('keydown', closeAddPopupByClickOnEsc);
 };
 
 // Функция Открыть popupEdit с заполнением полей
@@ -40,6 +41,7 @@ function openPopupEditForm() {
   openPopup(popupEditElement);
   userNamePopupInput.value = userName.textContent;
   descriptionPopupInput.value = description.textContent;
+  document.addEventListener('keydown', closeEditPopupByClickOnEsc);
 };
 
 // Сохранить введенные данные popupEdit и закрыть попап
@@ -57,14 +59,67 @@ function closePopup(popup) {
 // Закрыть popupEdit
 function closePopupEditForm() {
   closePopup(popupEditElement);
+  document.removeEventListener('keydown', closeEditPopupByClickOnEsc);
 };
 // Закрыть popupAdd
 function closePopupAdd() {
   closePopup(popupAddElement);
+  document.removeEventListener('keydown', closeAddPopupByClickOnEsc);
+
 };
 // Закрыть popupPicture
 function closePopupPicture() {
   closePopup(popupPictureElement);
+  document.removeEventListener('keydown', closePicturePopupByClickOnEsc);
+};
+
+// Закрыть popup при клике на оверлей
+function closePopupByClickOnOverlay(event, popup) {
+  if(event.target === event.currentTarget) {
+    closePopup(popup);
+  }
+};
+// Закрыть popupEdit при клике на оверлей
+function closeEditPopupByClickOnOverlay() {
+  closePopupByClickOnOverlay( event, popupEditElement);
+};
+// Закрыть popupAdd при клике на оверлей
+function closeAddPopupByClickOnOverlay() {
+  closePopupByClickOnOverlay(event, popupAddElement);
+};
+// Закрыть popupPicture при клике на оверлей
+function closePicturePopupByClickOnOverlay() {
+  closePopupByClickOnOverlay(event, popupPictureElement);
+};
+
+// Закрыть popupEdit при нажатии на оверлей Ecs
+function closeEditPopupByClickOnEsc(e) {
+  if (e.key == 'Escape') {
+    closePopupEditForm()
+  }
+}
+// Закрыть popupAdd при нажатии на оверлей Ecs
+function closeAddPopupByClickOnEsc(e) {
+  if (e.key == 'Escape') {
+    closePopupAdd()
+  }
+}
+// Закрыть popupPicture при нажатии на оверлей Ecs
+function closePicturePopupByClickOnEsc(e) {
+  if (e.key == 'Escape') {
+    closePopupPicture()
+  }
+}
+
+// Сохранить данные popupAdd и закрыть попап
+const submitPopupAddForm = (event) => {
+  event.preventDefault();
+  renderCard({
+    name: popupAddCardNameInput.value,
+    link: popupAddCardLinkInput.value,
+  });
+  closePopupAdd();
+  event.target.reset();
 };
 
 // Лайк карточки
@@ -78,6 +133,7 @@ function handleCardElement(name, link) {
   popupOpenedPictureElement.alt = name
   popupPictureDescriptionElement.textContent = name
   openPopup(popupPictureElement)
+  document.addEventListener('keydown', closePicturePopupByClickOnEsc);
 }
 
 // Добавить карточки
@@ -113,25 +169,6 @@ initialCards.forEach((data) => {
   renderCard(data);
 });
 
-// Сохранить данные popupAdd и закрыть попап
-const submitPopupAddForm = (event) => {
-  event.preventDefault();
-  renderCard({
-    name: popupAddCardNameInput.value,
-    link: popupAddCardLinkInput.value,
-  });
-  closePopup(popupAddElement);
-  event.target.reset();
-};
-
-// Доп. ф-ция с вебинара, чтобы попап закрывался при клике вне формы
-// const closePopupByClickOnOverlay = function(event) {
-//     if(event.target === event.currentTarget) {
-//     closePopup();
-//     }
-// }
-// popupElement.addEventListener('click', closePopupByClickOnOverlay);
-
 // Обработчики событий popups
 popupFormEditElement.addEventListener('submit', submitPopupEditForm);
 popupOpenButtonElement.addEventListener('click', openPopupEditForm);
@@ -140,3 +177,6 @@ popupOpenAddButtonElement.addEventListener('click', openPopupAdd);
 popupPictureCloseButtonElement.addEventListener('click', closePopupPicture);
 popupCloseAddButtonElement.addEventListener('click', closePopupAdd);
 popupCloseButtonElement.addEventListener('click', closePopupEditForm);
+popupEditElement.addEventListener('click', closeEditPopupByClickOnOverlay);
+popupAddElement.addEventListener('click', closeAddPopupByClickOnOverlay);
+popupPictureElement.addEventListener('click', closePicturePopupByClickOnOverlay);

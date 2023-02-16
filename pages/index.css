@@ -49,3 +49,7 @@
 @import url(../blocks/popup/__picture-descr/popup__picture-descr.css);
 @import url(../blocks/popup/__container/_type_picture/popup__container_type_picture.css);
 @import url(../blocks/popup/_type_picture/popup_type_picture.css);
+@import url(../blocks/popup/__save/_disabled/popup__save_disabled.css);
+@import url(../blocks/popup/__error/popup__error.css);
+@import url(../blocks/popup/__error/_visible/popup__error_visible.css);
+@import url(../blocks/popup/__input/_type_error/popup__input_type_error.css);
