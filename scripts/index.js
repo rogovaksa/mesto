@@ -2,6 +2,8 @@
 const popupOpenButtonElement = document.querySelector('.profile__edit-button');
 const userName = document.querySelector('.profile__name');
 const description = document.querySelector('.profile__description');
+
+const popups = document.querySelectorAll('.popup');
 const popupCloseButtonElement = document.querySelector('.popup__close');
 const popupEditElement = document.querySelector('.popup_type_edit');
 const popupFormEditElement = document.querySelector('.popup__form-edit');
@@ -29,11 +31,12 @@ const elementsList = document.querySelector('.elements');
 // Функция Открыть попап
 function openPopup(elem) {
   elem.classList.add('popup_opened');
+  document.addEventListener('keydown', closeByEscape);
 };
+
 // Открыть popupAdd
 function openPopupAdd() {
   openPopup(popupAddElement);
-  document.addEventListener('keydown', closeAddPopupByClickOnEsc);
 };
 
 // Функция Открыть popupEdit с заполнением полей
@@ -41,7 +44,12 @@ function openPopupEditForm() {
   openPopup(popupEditElement);
   userNamePopupInput.value = userName.textContent;
   descriptionPopupInput.value = description.textContent;
-  document.addEventListener('keydown', closeEditPopupByClickOnEsc);
+};
+
+// Функция закрытия попапов
+function closePopup(popup) {
+  popup.classList.remove('popup_opened');
+  document.removeEventListener('keydown', closeByEscape);
 };
 
 // Сохранить введенные данные popupEdit и закрыть попап
@@ -49,67 +57,28 @@ function submitPopupEditForm(event) {
   event.preventDefault();
   userName.textContent = userNamePopupInput.value;
   description.textContent = descriptionPopupInput.value;
-  closePopupEditForm();
-};
-
-// Функция закрытия попапов
-function closePopup(popup) {
-  popup.classList.remove('popup_opened');
-};
-// Закрыть popupEdit
-function closePopupEditForm() {
   closePopup(popupEditElement);
-  document.removeEventListener('keydown', closeEditPopupByClickOnEsc);
-};
-// Закрыть popupAdd
-function closePopupAdd() {
-  closePopup(popupAddElement);
-  document.removeEventListener('keydown', closeAddPopupByClickOnEsc);
-
-};
-// Закрыть popupPicture
-function closePopupPicture() {
-  closePopup(popupPictureElement);
-  document.removeEventListener('keydown', closePicturePopupByClickOnEsc);
 };
 
-// Закрыть popup при клике на оверлей
-function closePopupByClickOnOverlay(event, popup) {
-  if(event.target === event.currentTarget) {
-    closePopup(popup);
-  }
-};
-// Закрыть popupEdit при клике на оверлей
-function closeEditPopupByClickOnOverlay() {
-  closePopupByClickOnOverlay( event, popupEditElement);
-};
-// Закрыть popupAdd при клике на оверлей
-function closeAddPopupByClickOnOverlay() {
-  closePopupByClickOnOverlay(event, popupAddElement);
-};
-// Закрыть popupPicture при клике на оверлей
-function closePicturePopupByClickOnOverlay() {
-  closePopupByClickOnOverlay(event, popupPictureElement);
-};
+// Закрыть попап при клике на 'Х' или оверлей
+popups.forEach((popup) => {
+    popup.addEventListener('mousedown', (evt) => {
+        if (evt.target.classList.contains('popup_opened')) {
+            closePopup(popup);
+        }
+        if (evt.target.classList.contains('popup__close')) {
+          closePopup(popup);
+        }
+    })
+});
 
-// Закрыть popupEdit при нажатии на оверлей Ecs
-function closeEditPopupByClickOnEsc(e) {
-  if (e.key == 'Escape') {
-    closePopupEditForm()
+// Закрыть popup при клике на Escape
+function closeByEscape(evt) {
+  if (evt.key === 'Escape') {
+    const openedPopup = document.querySelector('.popup_opened');
+    closePopup(openedPopup);
   }
-}
-// Закрыть popupAdd при нажатии на оверлей Ecs
-function closeAddPopupByClickOnEsc(e) {
-  if (e.key == 'Escape') {
-    closePopupAdd()
-  }
-}
-// Закрыть popupPicture при нажатии на оверлей Ecs
-function closePicturePopupByClickOnEsc(e) {
-  if (e.key == 'Escape') {
-    closePopupPicture()
-  }
-}
+};
 
 // Сохранить данные popupAdd и закрыть попап
 const submitPopupAddForm = (event) => {
@@ -118,7 +87,7 @@ const submitPopupAddForm = (event) => {
     name: popupAddCardNameInput.value,
     link: popupAddCardLinkInput.value,
   });
-  closePopupAdd();
+  closePopup(popupAddElement);
   event.target.reset();
 };
 
@@ -133,7 +102,6 @@ function handleCardElement(name, link) {
   popupOpenedPictureElement.alt = name
   popupPictureDescriptionElement.textContent = name
   openPopup(popupPictureElement)
-  document.addEventListener('keydown', closePicturePopupByClickOnEsc);
 }
 
 // Добавить карточки
@@ -174,9 +142,3 @@ popupFormEditElement.addEventListener('submit', submitPopupEditForm);
 popupOpenButtonElement.addEventListener('click', openPopupEditForm);
 popupFormAddElement.addEventListener('submit', submitPopupAddForm);
 popupOpenAddButtonElement.addEventListener('click', openPopupAdd);
-popupPictureCloseButtonElement.addEventListener('click', closePopupPicture);
-popupCloseAddButtonElement.addEventListener('click', closePopupAdd);
-popupCloseButtonElement.addEventListener('click', closePopupEditForm);
-popupEditElement.addEventListener('click', closeEditPopupByClickOnOverlay);
-popupAddElement.addEventListener('click', closeAddPopupByClickOnOverlay);
-popupPictureElement.addEventListener('click', closePicturePopupByClickOnOverlay);

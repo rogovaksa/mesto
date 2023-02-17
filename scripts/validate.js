@@ -21,9 +21,13 @@ function enableValidation(config) {
     toggleButton(form, config);
     });
 
+    form.addEventListener('reset', () => {
+      setTimeout(() => {
+        toggleButton(form, config), 0 })
+    });
+
     addInputListners(form, config);
     toggleButton(form, config);
-
   });
 };
 
@@ -51,7 +55,7 @@ function handleFormInput(event, config) {
     input.classList.add(config.errorClass);
     errorElement.textContent = input.validationMessage;
   }
-}
+};
 
 function toggleButton(form, config) {
   const buttonSubmit =  form.querySelector(config.submitButtonSelector);
@@ -59,6 +63,6 @@ function toggleButton(form, config) {
 
   buttonSubmit.disabled = !isFormValid;
   buttonSubmit.classList.toggle(config.inactiveButtonClass, !isFormValid);
-}
+};
 
 enableValidation(formValidationConfig);
