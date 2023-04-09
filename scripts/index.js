@@ -24,7 +24,7 @@ const popupAddCardLinkInput = document.querySelector('.popup__input_card_link');
 const elementsList = document.querySelector('.elements');
 
 // Функция Открыть попап
-export function openPopup(elem) {
+function openPopup(elem) {
   elem.classList.add('popup_opened');
   document.addEventListener('keydown', closeByEscape);
 };
@@ -86,9 +86,21 @@ const submitPopupAddForm = (event) => {
   event.target.reset();
 };
 
+function handleCardClick(name, link) {
+  const popupPictureElement = document.querySelector('.popup_type_picture');
+  const popupOpenedPictureElement = document.querySelector('.popup__picture');
+  const popupPictureDescriptionElement = document.querySelector('.popup__picture-descr');
+
+  popupOpenedPictureElement.src = link
+  popupOpenedPictureElement.alt = name
+  popupPictureDescriptionElement.textContent = name
+
+  openPopup(popupPictureElement);
+};
+
 // Рендеринг карточек
 const createCard = (data) => {
-  const card = new Card(data, '#element-template');
+  const card = new Card(data, '#element-template', handleCardClick);
   return card.generateCard();
 };
 

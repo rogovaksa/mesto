@@ -11,10 +11,6 @@ class FormValidator {
     this._submitButton = this._formElement.querySelector(this._submitButtonSelector);
   }
 
-  _disableSubmit(event) {
-    event.preventDefault();
-  };
-
   // проверка валидности полей инпутов
   _handleFormInput = (input) => {
     this._inputId = input.id;
@@ -46,8 +42,6 @@ class FormValidator {
   };
 
   _addInputListners() {
-    // this._inputList = Array.from(this._formElement.querySelectorAll(this._inputSelector));
-
     this._inputList.forEach((input) => {
       input.addEventListener('input', () => {
         this._toggleButton();
@@ -57,27 +51,22 @@ class FormValidator {
   }
 
   enableValidation() {
-    this._formList = document.querySelectorAll(this._formSelector);
+    this._formElement.addEventListener('submit', (event) => {
+      event.preventDefault();
+    });
 
-    this._formList.forEach(() => {
-      this._formElement.addEventListener('submit', () => {
-        this._disableSubmit()
-      });
-
-      this._formElement.addEventListener('input', () => {
-        this._toggleButton();
-      });
-
-      this._formElement.addEventListener('reset', () => {
-        setTimeout(() => {
-          this._toggleButton(), 0 })
-      });
-
-      this._addInputListners();
+    this._formElement.addEventListener('input', () => {
       this._toggleButton();
     });
-  };
 
+    this._formElement.addEventListener('reset', () => {
+      setTimeout(() => {
+        this._toggleButton(), 0 })
+    });
+
+    this._addInputListners();
+    this._toggleButton();
+  };
 
 };
 
