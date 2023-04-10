@@ -7,7 +7,6 @@ const userName = document.querySelector('.profile__name');
 const description = document.querySelector('.profile__description');
 
 const popups = document.querySelectorAll('.popup');
-// const popupCloseButtonElement = document.querySelector('.popup__close');
 const popupEditElement = document.querySelector('.popup_type_edit');
 const popupFormEditElement = document.querySelector('.popup__form-edit');
 const popupOpenAddButtonElement = document.querySelector('.profile__add-button');
@@ -22,6 +21,11 @@ const popupAddCardLinkInput = document.querySelector('.popup__input_card_link');
 
 // Объявление переменных, template образец карточки
 const elementsList = document.querySelector('.elements');
+
+// Объявление переменных, popupPicture Открыть изображение на весь экран
+const popupPictureElement = document.querySelector('.popup_type_picture');
+const popupOpenedPictureElement = document.querySelector('.popup__picture');
+const popupPictureDescriptionElement = document.querySelector('.popup__picture-descr');
 
 // Функция Открыть попап
 function openPopup(elem) {
@@ -68,7 +72,7 @@ popups.forEach((popup) => {
 });
 
 // Закрыть popup при клике на Escape
-export function closeByEscape(evt) {
+function closeByEscape(evt) {
   if (evt.key === 'Escape') {
     const openedPopup = document.querySelector('.popup_opened');
     closePopup(openedPopup);
@@ -87,10 +91,6 @@ const submitPopupAddForm = (event) => {
 };
 
 function handleCardClick(name, link) {
-  const popupPictureElement = document.querySelector('.popup_type_picture');
-  const popupOpenedPictureElement = document.querySelector('.popup__picture');
-  const popupPictureDescriptionElement = document.querySelector('.popup__picture-descr');
-
   popupOpenedPictureElement.src = link
   popupOpenedPictureElement.alt = name
   popupPictureDescriptionElement.textContent = name
