@@ -6,13 +6,13 @@ class UserInfo {
 
   getUserInfo() {
     return {
-      name: this._userName.textContent,
+      userName: this._userName.textContent,
       description: this._description.textContent,
     };
   }
 
-  setUserInfo({ name, description }) {
-    this._userName.textContent = name;
+  setUserInfo({ userName, description }) {
+    this._userName.textContent = userName;
     this._description.textContent = description;
   }
 }

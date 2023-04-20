@@ -7,11 +7,11 @@ class PopupWithImage extends Popup {
     this._description = this._popup.querySelector('.popup__picture-descr');
   }
 
-  openPopup({ name, link }) {
-    super.openPopup();
+  openPopup(name, link) {
     this._image.src = link;
     this._image.alt = name;
     this._description.textContent = name;
+    super.openPopup();
   }
 }
 

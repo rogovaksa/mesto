@@ -2,16 +2,9 @@ import "./index.css";
 
 import {
   popupOpenButtonElement,
-  popupFormEditElement,
   popupOpenAddButtonElement,
   userNamePopupInput,
   descriptionPopupInput,
-  popupFormAddElement,
-  popupAddCardNameInput,
-  popupAddCardLinkInput,
-  popupOpenedPictureElement,
-  popupPictureDescriptionElement,
-  elementsList,
   formValidationConfig,
 } from "../utils/constants.js";
 import {initialCards} from "../utils/initialCards.js";
@@ -24,42 +17,43 @@ import PopupWithForm from "../components/PopupWithForm.js";
 import UserInfo from "../components/UserInfo.js";
 
 // Сохранить введенные данные popupEdit и закрыть попап
-function submitPopupEditForm({ name, description }) {
-  userInfo.getUserInfo({ name, description });
-  name = userNamePopupInput.value;
-  description = descriptionPopupInput.value;
-  userInfo.setUserInfo({ name, description });
-  popupEditForm.closePopup();
+function submitPopupEditForm(data) {
+  userInfo.setUserInfo(data);
 };
 
-// Рендеринг карточки
-const createCard = (data) => {
-  const card = new Card(data, '#element-template', handleCardClick);
+// Создать карточку
+function createCard({ name, link }, template, handleCardClick) {
+  const card = new Card({ name, link }, template, handleCardClick);
   return card.generateCard();
 };
 
-const renderCard = (data, wrap) => {
-  const card = createCard(data);
-  wrap.prepend(card);
-};
+// Создание экземпляра класса Section, рендеринг карточек
+const itemList = new Section({
+  items: initialCards,
+  renderer: ({ name, link }) => {
+      const cardElement = createCard({ name, link }, '#element-template', handleCardClick);
+      itemList.addItem(cardElement);
+  },
+}, '.elements');
+
+itemList.renderItems();
 
 // Сохранить данные popupAdd и закрыть попап
-const submitPopupAddForm = (evt) => {
-  renderCard({
-    name: popupAddCardNameInput.value,
-    link: popupAddCardLinkInput.value,
-  }, elementsList);
-  popupAddForm.closePopup();
-  evt.target.reset();
+function submitPopupAddForm(data) {
+  const newCard = createCard(data, '#element-template', handleCardClick);
+  itemList.addItem(newCard);
 };
 
 // Открыть popupPicture при клике на карточку
 function handleCardClick(name, link) {
-  popupOpenedPictureElement.src = link
-  popupOpenedPictureElement.alt = name
-  popupPictureDescriptionElement.textContent = name
+  popupPicture.openPopup(name, link);
+};
 
-  popupPicture.openPopup();
+// Заполнить поля формы данными из профиля
+function handleTextInput() {
+  const { userName, description } = userInfo.getUserInfo();
+  userNamePopupInput.value = userName;
+  descriptionPopupInput.value = description;
 };
 
 // Экземпляр класса PopupWithImage
@@ -73,17 +67,7 @@ popupEditForm.setEventListeners();
 const popupAddForm = new PopupWithForm('.popup_type_add', submitPopupAddForm);
 popupAddForm.setEventListeners();
 
-// Создание экземпляра класса Section, рендеринг карточек
-const itemList = new Section({
-  items: initialCards,
-  renderer: (data) => {
-      const card = new Card(data, '#element-template', handleCardClick);
-      const cardElement = card.generateCard();
-      itemList.addItem(cardElement);
-  }
-}, '.elements');
 
-itemList.renderItems();
 
 // Создание экземпляра класса UserInfo
 const userInfo = new UserInfo({
@@ -92,10 +76,11 @@ const userInfo = new UserInfo({
 });
 
 // Обработчики событий popup
-popupFormEditElement.addEventListener('submit', submitPopupEditForm);
-popupOpenButtonElement.addEventListener('click', popupEditForm.openPopup);
-popupFormAddElement.addEventListener('submit', submitPopupAddForm);
-popupOpenAddButtonElement.addEventListener('click', popupAddForm.openPopup);
+popupOpenButtonElement.addEventListener('click', () => {
+  popupEditForm.openPopup();
+  handleTextInput();
+});
+popupOpenAddButtonElement.addEventListener('click', () => popupAddForm.openPopup());
 
 // Создание экземпляров класса FormValidator
 const validFormpopupAdd = new FormValidator(formValidationConfig, '.popup_type_add');
