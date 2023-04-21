@@ -39,8 +39,8 @@ const itemList = new Section({
 itemList.renderItems();
 
 // Сохранить данные popupAdd и закрыть попап
-function submitPopupAddForm(data) {
-  const newCard = createCard(data, '#element-template', handleCardClick);
+function submitPopupAddForm({ name, link }) {
+  const newCard = createCard({ name, link }, '#element-template', handleCardClick);
   itemList.addItem(newCard);
 };
 
