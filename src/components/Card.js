@@ -11,15 +11,15 @@ class Card {
     this._ownerId = data.owner._id;
     this._cardId = data._id;
     this._likes = data.likes;
-}
+  }
 
   _getTemplate() {
     const cardElement = document.querySelector(this._template).content.querySelector('.element').cloneNode(true);
     this._cardLike = cardElement.querySelector('.element__like-button');
     this._cardDelete = cardElement.querySelector('.element__delete');
     this._cardPicture = cardElement.querySelector('.element__picture');
-    this._cardCountLike = cardElement.querySelector('.element__like-counter');
-    this._cardCountLike.textContent = this._likes.length;
+    this.cardCountLike = cardElement.querySelector('.element__like-counter');
+    this.cardCountLike.textContent = this._likes.length;
 
     if (
     this._likes.filter((like) => like._id === this._userId)
@@ -30,6 +30,10 @@ class Card {
 
     return cardElement;
   } //'#element-template'
+
+  // cardCountLike() {
+  //   document.querySelector('.element__like-counter').textContent = this._likes.length;
+  // }
 
   generateCard = () => {
     this._cardElement = this._getTemplate();

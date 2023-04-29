@@ -4,8 +4,8 @@ import {
   popupOpenButtonElement,
   popupOpenAddButtonElement,
   popupOpenAvatar,
-  userNamePopupInput,
-  descriptionPopupInput,
+  // userNamePopupInput,
+  // descriptionPopupInput,
   formValidationConfig,
 } from "../utils/constants.js";
 
@@ -21,24 +21,20 @@ import {api} from "../components/Api.js";
 let userId;
 
 // Получить данные с сервера
-api.getUserInfo()
-.then((res) => {
-  userId = res._id;
-  userInfo.setUserInfo(res) })
-.catch((error) => console.log(`Ошибка: ${error}`))
-
-api.getInitialCards()
-.then((res) => {
-  itemList.renderItems(res);
+Promise.all([api.getUserInfo(), api.getInitialCards()])
+.then(([userData, initialCards]) => {
+  userId = userData._id;
+  userInfo.setUserInfo(userData);
+  itemList.renderItems(initialCards);
 })
 .catch((error) => console.log(`Ошибка: ${error}`))
 
 // Лайк/дизлайк карточки
-const handleLikeCard = (card) => {
+const handleCardLike = (card) => {
   api.likeCard(card._cardId)
   .then((res) => {
     card.toggleCardLike();
-    card._cardCountLike.textContent = res.likes.length;
+    card.cardCountLike.textContent = res.likes.length;
   })
   .catch((err) => { console.log(err) });
 };
@@ -47,7 +43,7 @@ const handleDislikeCard = (card) => {
   api.dislikeCard(card._cardId)
   .then((res) => {
     card.toggleCardLike();
-    card._cardCountLike.textContent = res.likes.length;
+    card.cardCountLike.textContent = res.likes.length;
   })
   .catch((err) => { console.log(err) });
 };
@@ -61,49 +57,40 @@ function handleDeleteClick(card) {
     api.deleteCard(card._cardId)
     .then(() => {
       card.deleteCard();
-      popupTypeConfirm.close();
+      popupTypeConfirm.closePopup();
     })
     .catch((error) => console.log(`Ошибка: ${error}`))
     .finally(() => {
       popupTypeConfirm.setLoadingText(submitBtnText);
     });
-  })
+  });
 };
 
 // Сохранить введенные данные popupEdit
 function submitPopupEditForm(data) {
-  const submitBtnText = popupEditForm.getSubmitBtnText();
-  popupEditForm.setLoadingText('Сохранение...');
-  api.patchUserInfo(data)
-  .then((res) => { userInfo.setUserInfo(res) })
+  return api.patchUserInfo(data)
+  .then((res) => {
+    userInfo.setUserInfo(res);
+  })
   .catch((error) => console.log(`Ошибка: ${error}`))
-  .finally(() => {
-    popupEditForm.setLoadingText(submitBtnText);
-  });
 };
 
 // Сохранить введенные данные popupAdd
 function submitPopupAddForm(data) {
-  const submitBtnText = popupAddForm.getSubmitBtnText();
-  popupAddForm.setLoadingText('Сохранение...');
-  api.createNewCard(data)
-  .then((res) => {renderCard(res)})
+  return api.createNewCard(data)
+  .then((res) => {
+    renderCard(res);
+  })
   .catch((error) => console.log(`Ошибка: ${error}`))
-  .finally(() => {
-    popupAddForm.setLoadingText(submitBtnText);
-  });
 };
 
 // Сохранить введенные данные popupAvatar
 function submitPopupAvatarForm(item) {
-  const submitBtnText = popupAvatarForm.getSubmitBtnText();
-  popupAvatarForm.setLoadingText('Сохранение...');
-  api.patchAvatar(item)
-  .then((res) => { userInfo.setUserInfo(res) })
+  return api.patchAvatar(item)
+  .then((res) => {
+    userInfo.setUserInfo(res);
+  })
   .catch((error) => console.log(`Ошибка: ${error}`))
-  .finally(() => {
-    popupAvatarForm.setLoadingText(submitBtnText);
-  });
 };
 
 // Открыть popupPicture при клике на карточку
@@ -112,10 +99,14 @@ function handleCardClick(name, link) {
 };
 
 // Заполнить поля формы данными из профиля
+// function handleTextInput() {
+//   const userObject = userInfo.getUserInfo();
+//   userNamePopupInput.value = userObject.name;
+//   descriptionPopupInput.value = userObject.about;
+// };
+
 function handleTextInput() {
-  const  userObject = userInfo.getUserInfo();
-  userNamePopupInput.value = userObject.name;
-  descriptionPopupInput.value = userObject.about;
+  popupEditForm.setInputValues(userInfo.getUserInfo());
 };
 
 // Функция создания карточки
@@ -125,7 +116,7 @@ const createCard = (...args) => {
 
 // Рендеринг карточки
 const renderCard = (element) => {
-  const card = createCard(element, '#element-template', handleCardClick, handleLikeCard, handleDislikeCard, handleDeleteClick, userId);
+  const card = createCard(element, '#element-template', handleCardClick, handleCardLike, handleDislikeCard, handleDeleteClick, userId);
   itemList.addItem(card);
 }
 
