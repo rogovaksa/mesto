@@ -6,6 +6,7 @@ class PopupWithForm extends Popup {
     this._handleSubmit = handleSubmit;
     this._popupForm = this._popup.querySelector('.popup__form');
     this._inputList = this._popup.querySelectorAll('.popup__input');
+    this._popupSubmitButton = this._popup.querySelector('.popup__save');
   }
 
   closePopup() {
@@ -13,7 +14,6 @@ class PopupWithForm extends Popup {
     this._popupForm.reset();
   };
 
-  // метод, собирающий введенные данные инпутов формы
   _getInputValues() {
     this._formValues = {};
 
@@ -23,6 +23,14 @@ class PopupWithForm extends Popup {
 
     return this._formValues;
   };
+
+  getSubmitBtnText() {
+    return this._popupSubmitButton.textContent;
+  }
+
+  setLoadingText(text) {
+    this._popupSubmitButton.textContent = text;
+  }
 
   setEventListeners() {
     super.setEventListeners();

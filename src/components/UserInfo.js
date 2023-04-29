@@ -1,19 +1,22 @@
 class UserInfo {
-  constructor({ userNameSelector, descriptionSelector }) {
-    this._userName = document.querySelector(userNameSelector);
-    this._description = document.querySelector(descriptionSelector);
+  constructor({ userNameSelector, descriptionSelector, avatarSelector }) {
+    this._name = document.querySelector(userNameSelector);
+    this._about = document.querySelector(descriptionSelector);
+    this._avatar = document.querySelector(avatarSelector);
   }
 
   getUserInfo() {
     return {
-      userName: this._userName.textContent,
-      description: this._description.textContent,
+      name: this._name.textContent,
+      about: this._about.textContent,
     };
   }
 
-  setUserInfo({ userName, description }) {
-    this._userName.textContent = userName;
-    this._description.textContent = description;
+  setUserInfo({ name, about, avatar, id }) {
+    this._name.textContent = name;
+    this._about.textContent = about;
+    this._avatar.src = avatar;
+    this._userId = id;
   }
 }
 
